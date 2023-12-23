@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  # PostgreSQL database
+  postgres-db:
+    image: postgres
+    container_name: postgres-songmanager-db
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=songs_manager
+    ports:
+      - '5432:5432'
+
+  # pgAdmin container
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - '5050:80'
