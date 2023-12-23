@@ -1,10 +1,10 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import imt.fil.cl.leja.songmanagerapi.song.Song;
+import java.util.List;
+
+import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +20,18 @@ public class Singer {
     @Id
     // Génération de la clé lors d'une insertion en base de données.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "singer_id")
     private Long id;
     private String firstname;
     private String lastname;
+
+    // Rélation (sings) avec la table Song
+    @ManyToMany
+    @JoinTable(
+            name = "sings",
+            joinColumns = @JoinColumn(name = "singer_id"),
+            inverseJoinColumns = @JoinColumn(name = "song_id")
+    )
+    private List<Song> songs;
 
 }
