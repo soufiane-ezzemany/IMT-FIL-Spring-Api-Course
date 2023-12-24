@@ -3,6 +3,8 @@ package imt.fil.cl.leja.songmanagerapi.singer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SingerService {
 
@@ -21,6 +23,11 @@ public class SingerService {
 
         // Ajoutez le chanteur à la base de données en utilisant le repository
         singerRepository.save(singer);
+    }
+
+    public Optional<Singer> getSingerAndBestSongs(Long singerId) {
+        // Renvoie le chanteur avec la liste des meilleurs chansons
+        return singerRepository.findByIdWithBestSongs(singerId, 4);
     }
 }
 

@@ -1,14 +1,14 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import imt.fil.cl.leja.songmanagerapi.song.Song;
-import java.util.List;
-
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,12 +26,12 @@ public class Singer {
     private String lastname;
 
     // Rélation (sings) avec la table Song
-    @ManyToMany
+    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "sings",
             joinColumns = @JoinColumn(name = "singer_id"),
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
     private List<Song> songs;
-
 }
