@@ -1,6 +1,6 @@
 package imt.fil.cl.leja.songmanagerapi.song;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import imt.fil.cl.leja.songmanagerapi.singer.Singer;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class Song {
     private Float rating;
 
     // Rélation (sings) avec la table Song
-    @JsonBackReference
+    @JsonIgnore
     @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL)
     private List<Singer> singers;
 }
