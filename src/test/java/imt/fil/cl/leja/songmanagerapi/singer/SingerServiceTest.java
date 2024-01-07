@@ -1,7 +1,6 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
 import imt.fil.cl.leja.songmanagerapi.song.Song;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -45,5 +45,17 @@ class SingerServiceTest {
         // Assert
         assertEquals(mockSinger, result.orElse(null));
         verify(singerRepository).findByIdWithBestSongs(singerId, minRating);
+    }
+
+    @Test
+    void testAddSinger() {
+        // Création d'un objet SingerCreateDTO pour le test
+        SingerCreateDTO singerCreateDTO = new SingerCreateDTO("John", "Doe");
+
+        // Appel de la méthode addSinger
+        singerService.addSinger(singerCreateDTO);
+
+        // Vérification que la méthode save du repository a été appelée avec les bonnes valeurs
+        verify(singerRepository).save(any(Singer.class));
     }
 }
