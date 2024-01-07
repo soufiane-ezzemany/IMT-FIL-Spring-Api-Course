@@ -15,14 +15,14 @@ public class SingerService {
         this.singerRepository = singerRepository;
     }
 
-    public void addSinger(String firstname, String lastname) {
+    public void addSinger(SingerCreateDTO singer) {
         // Créez une instance de Singer avec le prénom et le nom fournis
-        Singer singer = new Singer();
-        singer.setFirstname(firstname);
-        singer.setLastname(lastname);
+        Singer singerComplete = new Singer();
+        singerComplete.setFirstname(singer.getFirstName());
+        singerComplete.setLastname(singer.getLastName());
 
         // Ajoutez le chanteur à la base de données en utilisant le repository
-        singerRepository.save(singer);
+        singerRepository.save(singerComplete);
     }
 
     public Optional<Singer> getSingerAndBestSongs(Long singerId) {

@@ -20,11 +20,11 @@ public class SingerController {
     @PostMapping(value="/add")
     @Operation(summary = "Ajouter un chanteur")
     public ResponseEntity<String> addSinger(
-            @RequestBody Singer singer) {
+            @RequestBody SingerCreateDTO singer) {
 
         try {
             // On utilise le service pour ajouter le chanteur à la base de données
-            singerService.addSinger(singer.getFirstname(), singer.getLastname());
+            singerService.addSinger(singer);
             return ResponseEntity.ok("Chanteur ajouté avec succès");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de l'ajout du chanteur");
