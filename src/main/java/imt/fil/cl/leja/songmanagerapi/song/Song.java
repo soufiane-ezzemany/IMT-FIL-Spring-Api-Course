@@ -9,15 +9,12 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "Song")
 public class Song {
@@ -25,14 +22,18 @@ public class Song {
     // Génération de la clé lors d'une insertion en base de données.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "song_id")
+    @lombok.NonNull
     private Long id;
     @NotNull
+    @lombok.NonNull
     private String title;
     @NotNull
-    private Integer year;
+    @lombok.NonNull
+    private Integer release_year;
     @Min(value = 0, message = "Rating should not be less than 0")
     @Max(value = 5, message = "Rating should not be greater than 5")
     @NotNull
+    @lombok.NonNull
     private Float rating;
 
     // Rélation (sings) avec la table Song

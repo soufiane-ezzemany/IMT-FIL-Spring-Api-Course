@@ -2,17 +2,14 @@ package imt.fil.cl.leja.songmanagerapi.singer;
 
 import imt.fil.cl.leja.songmanagerapi.song.Song;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name = "Singer")
 public class Singer {
@@ -20,8 +17,11 @@ public class Singer {
     // Génération de la clé lors d'une insertion en base de données.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "singer_id")
+    @lombok.NonNull
     private Long id;
+    @lombok.NonNull
     private String firstname;
+    @lombok.NonNull
     private String lastname;
 
     // Rélation (sings) avec la table Song
