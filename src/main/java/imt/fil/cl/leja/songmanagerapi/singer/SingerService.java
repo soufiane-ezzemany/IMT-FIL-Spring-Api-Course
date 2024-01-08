@@ -54,5 +54,10 @@ public class SingerService {
         // Renvoie le chanteur avec la liste des meilleurs chansons
         return singerRepository.findByIdWithBestSongs(singerId, 4);
     }
+    
+    public Optional<List<SingerInfoOnly>> getAllSingers(){
+        // Renvoie la liste des chanteurs
+        return singerRepository.findAllBy();
+    }
 }
 

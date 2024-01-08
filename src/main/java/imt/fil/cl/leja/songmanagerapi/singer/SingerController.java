@@ -50,6 +50,16 @@ public class SingerController {
                                        .build()
                );
     }
+    
+    @GetMapping("")
+    @Operation(summary = "Récupérer la liste de tout les chanteurs")
+    public Optional<List<SingerInfoOnly>> getAllSingers(){
+        Optional<List<SingerInfoOnly>> singers = singerService.getAllSingers();
+        if (singers.isPresent()){
+            return singers;
+        }
+        return null;
+    }
 }
 
 
