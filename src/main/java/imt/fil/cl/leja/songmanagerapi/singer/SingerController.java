@@ -38,8 +38,8 @@ public class SingerController {
     }
     @PostMapping("/{singerId}/add-songs")
     public ResponseEntity<Singer> addSongsToSinger(@PathVariable Long singerId, @RequestBody Set<SongDTO> songs){
-        Singer singer = singerService.getSingerById(singerId);
         try {
+            Singer singer = singerService.getSingerById(singerId);
             singerService.addSongsToSinger(singer, songs);
             return ResponseEntity.ok(singer);
         } catch (Exception e) {
