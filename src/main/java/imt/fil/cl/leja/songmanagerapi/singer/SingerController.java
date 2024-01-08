@@ -1,5 +1,6 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
+import imt.fil.cl.leja.songmanagerapi.singer.projections.SingerInfoOnly;
 import imt.fil.cl.leja.songmanagerapi.song.Song;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -49,6 +52,16 @@ public class SingerController {
                                        .header("Error", "No singer found")
                                        .build()
                );
+    }
+    
+    @GetMapping("")
+    @Operation(summary = "Récupérer la liste de tout les chanteurs")
+    public Optional<List<SingerInfoOnly>> getAllSingers(){
+        Optional<List<SingerInfoOnly>> singers = singerService.getAllSingers();
+        if (singers.isPresent()){
+            return singers;
+        }
+        return null;
     }
 }
 
