@@ -58,4 +58,15 @@ class SingerServiceTest {
         // Vérification que la méthode save du repository a été appelée avec les bonnes valeurs
         verify(singerRepository).save(any(Singer.class));
     }
+
+    @Test
+    void testGetAll(){
+
+        // Appel de la méthode addSinger
+        singerService.getAllSingers();
+
+        // Vérification que la méthode save du repository a été appelée avec les bonnes valeurs
+        verify(singerRepository).findAllBy();
+
+    }
 }

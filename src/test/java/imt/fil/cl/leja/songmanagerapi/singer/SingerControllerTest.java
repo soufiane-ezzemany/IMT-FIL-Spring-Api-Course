@@ -12,9 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 
 @WebMvcTest(SingerController.class)
 @ExtendWith(MockitoExtension.class)
@@ -55,6 +57,21 @@ class SingerControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.content().string("Erreur lors de l'ajout du chanteur"));
     }
+
+    @Test
+    void testGetAllSinger() throws Exception{
+        // Créer une instance de Singer pour simuler les données de retour du service
+        Singer singer = new Singer(1L, "anas", "alaoui");
+        List<Singer> singers = List.of(singer);
+        // Configurer le comportement du service mock
+        doReturn(Optional.of(singers)).when(singerService).getAllSingers();
+
+        // Exécuter la requête et vérifier les résultats
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/singers"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(singers)));
+    }
+
 
 
 }
