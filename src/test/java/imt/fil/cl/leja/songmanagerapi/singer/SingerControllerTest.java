@@ -31,14 +31,14 @@ class SingerControllerTest {
     @Test
     void testAddSinger() throws Exception {
         // Création d'un objet SingerCreateDTO factice pour le test
-        SingerCreateDTO singerCreateDTO = new SingerCreateDTO("Leo", "Le GOFF");
+        SingerDTO singerDTO = new SingerDTO("Leo", "Le GOFF");
 
         // Simuler l'ajout du chanteur dans le service
-        doNothing().when(singerService).addSinger(any(SingerCreateDTO.class));
+        doNothing().when(singerService).addSinger(any(SingerDTO.class));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/singers/add")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(singerCreateDTO)))
+                        .content(objectMapper.writeValueAsString(singerDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("Chanteur ajouté avec succès"));
     }
@@ -46,14 +46,14 @@ class SingerControllerTest {
     @Test
     void testAddSingerException() throws Exception {
         // Création d'un objet SingerCreateDTO factice pour le test
-        SingerCreateDTO singerCreateDTO = new SingerCreateDTO("Leo", "Le GOFF");
+        SingerDTO singerDTO = new SingerDTO("Leo", "Le GOFF");
 
-        doThrow(new RuntimeException("Error")).when(singerService).addSinger(any(SingerCreateDTO.class));
+        doThrow(new RuntimeException("Error")).when(singerService).addSinger(any(SingerDTO.class));
 
         // Perform the POST request and validate the response
         mockMvc.perform(MockMvcRequestBuilders.post("/api/singers/add")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(singerCreateDTO)))
+                        .content(objectMapper.writeValueAsString(singerDTO)))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.content().string("Erreur lors de l'ajout du chanteur"));
     }

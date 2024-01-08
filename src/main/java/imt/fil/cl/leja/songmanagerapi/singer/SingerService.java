@@ -2,6 +2,7 @@ package imt.fil.cl.leja.songmanagerapi.singer;
 
 import imt.fil.cl.leja.songmanagerapi.singer.projections.SingerInfoOnly;
 import imt.fil.cl.leja.songmanagerapi.song.Song;
+import imt.fil.cl.leja.songmanagerapi.song.SongDTO;
 import imt.fil.cl.leja.songmanagerapi.song.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class SingerService {
         this.songRepository = songRepository;
     }
 
-    public void addSinger(SingerCreateDTO singer) {
+    public void addSinger(SingerDTO singer) {
         // Créez une instance de Singer avec le prénom et le nom fournis
         Singer singerComplete = new Singer();
         singerComplete.setFirstname(singer.getFirstName());
@@ -34,21 +35,26 @@ public class SingerService {
         singerRepository.save(singerComplete);
     }
 
-    @Transactional
-    public void addSongsToSinger(Singer singer, Set<Song> songs) {
-        for (Song song : songs) {
-            song.getSingers().add(singer);
+    @Transactional(rollbackFor = Exception.class)
+    public void addSongsToSinger(Singer singer, Set<SongDTO> songs) {
+        for (SongDTO songDTO : songs) {
+            Song song;
+            if (songDTO.getSongId() == null) {
+                song = new Song(songDTO);
+            } else {
+                song = getSongById(songDTO.getSongId());
+            }
             singer.getSongs().add(song);
+            songRepository.save(song);
         }
-        singerRepository.save(singer);
     }
 
     public Singer getSingerById(Long singerId) {
         return singerRepository.findById(singerId).orElse(null);
     }
 
-    public Set<Song> getSongsByIds(Set<Long> songIds) {
-        return songRepository.findAllById(songIds).orElse(null);
+    public Song getSongById(Long songId) {
+        return songRepository.findById(songId).orElse(null);
     }
 
 

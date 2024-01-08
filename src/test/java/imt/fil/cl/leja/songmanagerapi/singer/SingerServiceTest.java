@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +35,7 @@ class SingerServiceTest {
         mockSinger.setLastname("Singer");
         Song mockSong1 = new Song(2L, "Test song 1", 2024, 5f);
         Song mockSong2 = new Song(3L, "Test song 2", 2023, 4f);
-        mockSinger.setSongs(List.of(mockSong1, mockSong2));
+        mockSinger.setSongs(Set.of(mockSong1, mockSong2));
 
         when(singerRepository.findByIdWithBestSongs(singerId, minRating)).thenReturn(Optional.of(mockSinger));
 
@@ -50,10 +50,10 @@ class SingerServiceTest {
     @Test
     void testAddSinger() {
         // Création d'un objet SingerCreateDTO pour le test
-        SingerCreateDTO singerCreateDTO = new SingerCreateDTO("John", "Doe");
+        SingerDTO singerDTO = new SingerDTO("John", "Doe");
 
         // Appel de la méthode addSinger
-        singerService.addSinger(singerCreateDTO);
+        singerService.addSinger(singerDTO);
 
         // Vérification que la méthode save du repository a été appelée avec les bonnes valeurs
         verify(singerRepository).save(any(Singer.class));

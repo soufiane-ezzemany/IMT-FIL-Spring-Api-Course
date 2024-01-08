@@ -1,7 +1,7 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
 import imt.fil.cl.leja.songmanagerapi.singer.projections.SingerInfoOnly;
-import imt.fil.cl.leja.songmanagerapi.song.Song;
+import imt.fil.cl.leja.songmanagerapi.song.SongDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class SingerController {
     @PostMapping(value="/add")
     @Operation(summary = "Ajouter un chanteur")
     public ResponseEntity<String> addSinger(
-            @RequestBody SingerCreateDTO singer) {
+            @RequestBody SingerDTO singer) {
 
         try {
             // On utilise le service pour ajouter le chanteur à la base de données
@@ -37,10 +37,14 @@ public class SingerController {
         }
     }
     @PostMapping("/{singerId}/add-songs")
-    public void addSongsToSinger(@PathVariable Long singerId, @RequestBody Set<Long> songIds) {
+    public ResponseEntity<Singer> addSongsToSinger(@PathVariable Long singerId, @RequestBody Set<SongDTO> songs){
         Singer singer = singerService.getSingerById(singerId);
-        Set<Song> songs = singerService.getSongsByIds(songIds);
-        singerService.addSongsToSinger(singer, songs);
+        try {
+            singerService.addSongsToSinger(singer, songs);
+            return ResponseEntity.ok(singer);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("{singerId}/bestsongs")

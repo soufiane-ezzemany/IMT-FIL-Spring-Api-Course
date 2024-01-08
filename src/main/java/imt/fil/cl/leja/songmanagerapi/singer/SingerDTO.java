@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SingerCreateDTO {
+public class SingerDTO {
 
     private String firstName;
 

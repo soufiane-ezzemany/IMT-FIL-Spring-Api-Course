@@ -4,7 +4,7 @@ import imt.fil.cl.leja.songmanagerapi.song.Song;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,5 +31,5 @@ public class Singer {
             joinColumns = @JoinColumn(name = "singer_id"),
             inverseJoinColumns = @JoinColumn(name = "song_id")
     )
-    private List<Song> songs;
+    private Set<Song> songs;
 }
