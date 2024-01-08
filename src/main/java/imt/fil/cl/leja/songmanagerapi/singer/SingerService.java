@@ -37,6 +37,9 @@ public class SingerService {
 
     @Transactional(rollbackFor = Exception.class)
     public void addSongsToSinger(Singer singer, Set<SongDTO> songs) {
+        if (singer == null) {
+            throw new RuntimeException("Singer not found");
+        }
         for (SongDTO songDTO : songs) {
             Song song;
             if (songDTO.getSongId() == null) {

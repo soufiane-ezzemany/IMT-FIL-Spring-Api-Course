@@ -1,6 +1,8 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import imt.fil.cl.leja.songmanagerapi.song.SongDTO;
+import imt.fil.cl.leja.songmanagerapi.song.SongRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,6 +16,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -26,11 +29,12 @@ class SingerControllerTest {
 
     @MockBean
     private SingerService singerService;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void testAddSinger() throws Exception {
-        // Création d'un objet SingerCreateDTO factice pour le test
+        // Création d'un objet SingerDTO factice pour le test
         SingerDTO singerDTO = new SingerDTO("Leo", "Le GOFF");
 
         // Simuler l'ajout du chanteur dans le service
@@ -45,7 +49,7 @@ class SingerControllerTest {
 
     @Test
     void testAddSingerException() throws Exception {
-        // Création d'un objet SingerCreateDTO factice pour le test
+        // Création d'un objet SingerDTO factice pour le test
         SingerDTO singerDTO = new SingerDTO("Leo", "Le GOFF");
 
         doThrow(new RuntimeException("Error")).when(singerService).addSinger(any(SingerDTO.class));
@@ -70,6 +74,26 @@ class SingerControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/singers"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(singers)));
+    }
+
+    @Test
+    void testAddSongsToSinger() throws Exception{
+        // Créer une instance de Singer pour simuler les données de retour du service
+        Singer singer = new Singer(1L, "leo", "joly");
+
+        // Créer une liste d'instances de SongDTO pour simuler les données de envoyer au service
+        SongDTO songDTO = new SongDTO(1L, "test", 2024 , 5f);
+        SongDTO songDTO2 = new SongDTO(2L, "test2", 2023 , 4f);
+        Set<SongDTO> songs = Set.of(songDTO, songDTO2);
+
+        // Configurer le comportement du service mock
+        doNothing().when(singerService).addSongsToSinger(singer, songs);
+
+        // Exécuter la requête et vérifier les résultats
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/singers/{singerId}/add-songs", singer.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(songs)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
 

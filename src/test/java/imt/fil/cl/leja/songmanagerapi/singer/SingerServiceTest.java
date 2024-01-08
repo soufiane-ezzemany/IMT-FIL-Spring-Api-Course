@@ -1,12 +1,15 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
 import imt.fil.cl.leja.songmanagerapi.song.Song;
+import imt.fil.cl.leja.songmanagerapi.song.SongDTO;
+import imt.fil.cl.leja.songmanagerapi.song.SongRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -20,6 +23,9 @@ class SingerServiceTest {
 
     @Mock
     private SingerRepository singerRepository;
+
+    @Mock
+    private SongRepository songRepository;
 
     @InjectMocks
     private SingerService singerService;
@@ -49,7 +55,7 @@ class SingerServiceTest {
 
     @Test
     void testAddSinger() {
-        // Création d'un objet SingerCreateDTO pour le test
+        // Création d'un objet SingerDTO pour le test
         SingerDTO singerDTO = new SingerDTO("John", "Doe");
 
         // Appel de la méthode addSinger
@@ -68,5 +74,36 @@ class SingerServiceTest {
         // Vérification que la méthode save du repository a été appelée avec les bonnes valeurs
         verify(singerRepository).findAllBy();
 
+    }
+
+    @Test
+    void testAddSongsToSinger() {
+        Singer singer = new Singer(1L, "John", "Doe");
+        SongDTO songDTO = new SongDTO(null, "Test song", 2021, 5f);
+        SongDTO songDTO2 = new SongDTO(2L, "Test song 2", 2021, 5f);
+        singer.setSongs(new HashSet<>());
+        Set<SongDTO> songs = new HashSet<>();
+        songs.add(songDTO);
+        songs.add(songDTO2);
+
+        singerService.addSongsToSinger(singer, songs);
+
+        for (SongDTO song : songs) {
+            verify(songRepository).save(any(Song.class));
+        }
+    }
+
+    @Test
+    void getSingerById(){
+        Singer singer = new Singer(1L, "John", "Doe");
+        singerService.getSingerById(singer.getId());
+        verify(singerRepository).findById(singer.getId());
+    }
+
+    @Test
+    void getSongById(){
+        Song song = new Song(1L, "Test song", 2021, 5f);
+        singerService.getSongById(song.getId());
+        verify(songRepository).findById(song.getId());
     }
 }
