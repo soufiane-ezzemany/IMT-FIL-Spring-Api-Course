@@ -40,4 +40,10 @@ public class Song {
     @JsonIgnore
     @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL)
     private List<Singer> singers;
+
+    public Song(SongDTO songDTO) {
+        this.title = songDTO.getTitle();
+        this.release_year = songDTO.getReleaseYear();
+        this.rating = songDTO.getRating();
+    }
 }
