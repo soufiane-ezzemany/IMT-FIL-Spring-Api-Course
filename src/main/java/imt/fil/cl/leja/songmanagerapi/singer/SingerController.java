@@ -2,6 +2,7 @@ package imt.fil.cl.leja.songmanagerapi.singer;
 
 import imt.fil.cl.leja.songmanagerapi.singer.projections.SingerInfoOnly;
 import imt.fil.cl.leja.songmanagerapi.song.SongDTO;
+import imt.fil.cl.leja.songmanagerapi.song.SongService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,12 @@ import java.util.Set;
 public class SingerController {
     private final SingerService singerService;
 
+    private final SongService songService;
+
     @Autowired
-    public SingerController(SingerService singerService) {
+    public SingerController(SingerService singerService, SongService songService) {
         this.singerService = singerService;
+        this.songService = songService;
     }
 
     @PostMapping(value="/add")
@@ -40,7 +44,7 @@ public class SingerController {
     public ResponseEntity<Singer> addSongsToSinger(@PathVariable Long singerId, @RequestBody Set<SongDTO> songs){
         try {
             Singer singer = singerService.getSingerById(singerId);
-            singerService.addSongsToSinger(singer, songs);
+            songService.addSongsToSinger(singer, songs);
             return ResponseEntity.ok(singer);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

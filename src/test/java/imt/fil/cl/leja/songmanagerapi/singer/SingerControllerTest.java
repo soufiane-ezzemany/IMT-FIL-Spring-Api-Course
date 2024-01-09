@@ -3,6 +3,7 @@ package imt.fil.cl.leja.songmanagerapi.singer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import imt.fil.cl.leja.songmanagerapi.song.SongDTO;
 import imt.fil.cl.leja.songmanagerapi.song.SongRepository;
+import imt.fil.cl.leja.songmanagerapi.song.SongService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,6 +30,9 @@ class SingerControllerTest {
 
     @MockBean
     private SingerService singerService;
+
+    @MockBean
+    private SongService songService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -87,7 +91,7 @@ class SingerControllerTest {
         Set<SongDTO> songs = Set.of(songDTO, songDTO2);
 
         // Configurer le comportement du service mock
-        doNothing().when(singerService).addSongsToSinger(singer, songs);
+        doNothing().when(songService).addSongsToSinger(singer, songs);
 
         // Exécuter la requête et vérifier les résultats
         mockMvc.perform(MockMvcRequestBuilders.post("/api/singers/{singerId}/add-songs", singer.getId())
