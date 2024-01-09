@@ -17,12 +17,9 @@ public class SingerService {
 
     private final SingerRepository singerRepository;
 
-    private final SongRepository songRepository;
-
     @Autowired
-    public SingerService(SingerRepository singerRepository, SongRepository songRepository) {
+    public SingerService(SingerRepository singerRepository) {
         this.singerRepository = singerRepository;
-        this.songRepository = songRepository;
     }
 
     public void addSinger(SingerDTO singer) {
@@ -35,29 +32,8 @@ public class SingerService {
         singerRepository.save(singerComplete);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void addSongsToSinger(Singer singer, Set<SongDTO> songs) {
-        if (singer == null) {
-            throw new RuntimeException("Singer not found");
-        }
-        for (SongDTO songDTO : songs) {
-            Song song;
-            if (songDTO.getSongId() == null) {
-                song = new Song(songDTO);
-            } else {
-                song = getSongById(songDTO.getSongId());
-            }
-            singer.getSongs().add(song);
-            songRepository.save(song);
-        }
-    }
-
     public Singer getSingerById(Long singerId) {
         return singerRepository.findById(singerId).orElse(null);
-    }
-
-    public Song getSongById(Long songId) {
-        return songRepository.findById(songId).orElse(null);
     }
 
 
