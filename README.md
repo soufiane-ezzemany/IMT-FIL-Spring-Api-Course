@@ -20,7 +20,7 @@ mvn spring-boot:run
 
 There are 4 endpoints in this project:
 
-connect to localhost:8080/swagger-ui.html to see the documentation of the endpoints
+connect to <localhost:8080/swagger-ui.html> to see the documentation of the endpoints
 
 ## Authors
 
