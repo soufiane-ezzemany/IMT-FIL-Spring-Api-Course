@@ -1,15 +1,18 @@
 package imt.fil.cl.leja.songmanagerapi.song;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import imt.fil.cl.leja.songmanagerapi.singer.Singer;
-import java.util.List;
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
-
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,13 +26,14 @@ public class Song {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "song_id")
     @lombok.NonNull
-    private Long id;
+    private Long songId;
     @NotNull
     @lombok.NonNull
     private String title;
     @NotNull
     @lombok.NonNull
-    private Integer release_year;
+    @Column(name = "release_year")
+    private Integer releaseYear;
     @Min(value = 0, message = "Rating should not be less than 0")
     @Max(value = 5, message = "Rating should not be greater than 5")
     @NotNull
@@ -37,13 +41,14 @@ public class Song {
     private Float rating;
 
     // Rélation (sings) avec la table Song
-    @JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnoreProperties("songs")
     @ManyToMany(mappedBy = "songs", cascade = CascadeType.ALL)
-    private List<Singer> singers;
+    private Set<Singer> singers;
 
     public Song(SongDTO songDTO) {
         this.title = songDTO.getTitle();
-        this.release_year = songDTO.getReleaseYear();
+        this.releaseYear = songDTO.getReleaseYear();
         this.rating = songDTO.getRating();
     }
 }
