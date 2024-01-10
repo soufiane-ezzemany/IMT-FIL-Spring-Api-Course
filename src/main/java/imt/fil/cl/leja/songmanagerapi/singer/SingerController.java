@@ -41,6 +41,7 @@ public class SingerController {
         }
     }
     @PostMapping("/{singerId}/add-songs")
+    @Operation(summary = "Ajouter des chansons à un chanteur")
     public ResponseEntity<Singer> addSongsToSinger(@PathVariable Long singerId, @RequestBody Set<SongDTO> songs){
         try {
             Singer singer = singerService.getSingerById(singerId);
@@ -53,23 +54,18 @@ public class SingerController {
 
     @GetMapping("{singerId}/bestsongs")
     @Operation(summary = "Récupérer un chanteur avec ses meilleurs chansons")
-    public ResponseEntity<Singer> getSingerWithBestSongs(@PathVariable Long singerId) {
-       return singerService.getSingerAndBestSongs(singerId)
+    public ResponseEntity<Singer> getSingerWithBestSongs(
+            @PathVariable Long singerId,
+            @RequestParam(name = "minRating") Float minRating) {
+       return singerService.getSingerAndBestSongs(singerId, minRating)
                .map(ResponseEntity::ok)
-               .orElseGet(() -> ResponseEntity.notFound()
-                                       .header("Error", "No singer found")
-                                       .build()
-               );
+               .orElseGet(() -> ResponseEntity.notFound().build());
     }
     
     @GetMapping("")
     @Operation(summary = "Récupérer la liste de tout les chanteurs")
     public Optional<List<SingerInfoOnly>> getAllSingers(){
-        Optional<List<SingerInfoOnly>> singers = singerService.getAllSingers();
-        if (singers.isPresent()){
-            return singers;
-        }
-        return null;
+        return singerService.getAllSingers();
     }
 }
 

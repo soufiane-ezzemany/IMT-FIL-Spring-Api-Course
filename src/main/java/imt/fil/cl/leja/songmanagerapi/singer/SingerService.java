@@ -1,16 +1,11 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
 import imt.fil.cl.leja.songmanagerapi.singer.projections.SingerInfoOnly;
-import imt.fil.cl.leja.songmanagerapi.song.Song;
-import imt.fil.cl.leja.songmanagerapi.song.SongDTO;
-import imt.fil.cl.leja.songmanagerapi.song.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class SingerService {
@@ -36,10 +31,9 @@ public class SingerService {
         return singerRepository.findById(singerId).orElse(null);
     }
 
-
-    public Optional<Singer> getSingerAndBestSongs(Long singerId) {
+    public Optional<Singer> getSingerAndBestSongs(Long singerId, Float minRating) {
         // Renvoie le chanteur avec la liste des meilleurs chansons
-        return singerRepository.findByIdWithBestSongs(singerId, 4);
+        return singerRepository.findByIdWithBestSongs(singerId, minRating);
     }
     
     public Optional<List<SingerInfoOnly>> getAllSingers(){
