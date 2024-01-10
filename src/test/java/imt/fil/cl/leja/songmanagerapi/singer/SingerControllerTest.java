@@ -1,8 +1,8 @@
 package imt.fil.cl.leja.songmanagerapi.singer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import imt.fil.cl.leja.songmanagerapi.song.Song;
 import imt.fil.cl.leja.songmanagerapi.song.SongDTO;
-import imt.fil.cl.leja.songmanagerapi.song.SongRepository;
 import imt.fil.cl.leja.songmanagerapi.song.SongService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -64,6 +64,35 @@ class SingerControllerTest {
                         .content(objectMapper.writeValueAsString(singerDTO)))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.content().string("Erreur lors de l'ajout du chanteur"));
+    }
+
+    @Test
+    void testgetSingerWithBestSongs() throws Exception {
+        // Création d'un objet Singer factice pour le test
+        Float minRating = 4f;
+        Long singerId = 1L;
+        Singer mockSinger = new Singer(singerId, "travis", "scott");
+        Song mockSong1 = new Song(2L, "Test song 1", 2024, 5f);
+        Song mockSong2 = new Song(3L, "Test song 2", 2023, 4f);
+        mockSinger.setSongs(Set.of(mockSong1, mockSong2));
+
+        doReturn(Optional.of(mockSinger)).when(singerService).getSingerAndBestSongs(singerId, minRating);
+
+        // Exécuter la requête et vérifier les résultats
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/singers/"+singerId+"/bestsongs?minRating="+minRating))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(mockSinger)));
+    }
+
+    @Test
+    void testgetSingerWithBestSongsNotFound() throws Exception {
+        Float minRating = 4f;
+        Long singerId = 1L;
+        doReturn(Optional.empty()).when(singerService).getSingerAndBestSongs(singerId, minRating);
+
+        // Exécuter la requête et vérifier les résultats
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/singers/"+singerId+"/bestsongs?minRating="+minRating))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test

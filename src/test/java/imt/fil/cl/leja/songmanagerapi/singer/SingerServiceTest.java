@@ -28,11 +28,8 @@ class SingerServiceTest {
     public void testGetSingerAndBestSongs() {
         // Arrange
         Long singerId = 1L;
-        int minRating = 4;
-        Singer mockSinger = new Singer();
-        mockSinger.setId(singerId);
-        mockSinger.setFirstname("Test");
-        mockSinger.setLastname("Singer");
+        Float minRating = 4f;
+        Singer mockSinger = new Singer(singerId, "travis", "scott");
         Song mockSong1 = new Song(2L, "Test song 1", 2024, 5f);
         Song mockSong2 = new Song(3L, "Test song 2", 2023, 4f);
         mockSinger.setSongs(Set.of(mockSong1, mockSong2));
@@ -40,7 +37,7 @@ class SingerServiceTest {
         when(singerRepository.findByIdWithBestSongs(singerId, minRating)).thenReturn(Optional.of(mockSinger));
 
         // Act
-        Optional<Singer> result = singerService.getSingerAndBestSongs(singerId);
+        Optional<Singer> result = singerService.getSingerAndBestSongs(singerId, minRating);
 
         // Assert
         assertEquals(mockSinger, result.orElse(null));

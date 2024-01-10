@@ -8,8 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class SingerDTO {
-
     private String firstName;
-
     private String lastName;
 }

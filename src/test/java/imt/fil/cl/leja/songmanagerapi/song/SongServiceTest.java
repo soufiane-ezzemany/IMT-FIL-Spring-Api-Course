@@ -44,7 +44,7 @@ public class SongServiceTest {
     @Test
     void getSongById(){
         Song song = new Song(1L, "Test song", 2021, 5f);
-        songService.getSongById(song.getId());
-        verify(songRepository).findById(song.getId());
+        songService.getSongById(song.getSongId());
+        verify(songRepository).findById(song.getSongId());
     }
 }
