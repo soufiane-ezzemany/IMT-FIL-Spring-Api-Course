@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,14 +28,14 @@ public class SongService {
             if (songDTO.getSongId() == null) {
                 song = new Song(songDTO);
             } else {
-                song = getSongById(songDTO.getSongId());
+                song = getSongById(songDTO.getSongId()).orElse(null);
             }
             singer.getSongs().add(song);
             songRepository.save(song);
         }
     }
 
-    public Song getSongById(Long songId) {
-        return songRepository.findById(songId).orElse(null);
+    public Optional<Song> getSongById(Long songId) {
+        return songRepository.findById(songId);
     }
 }

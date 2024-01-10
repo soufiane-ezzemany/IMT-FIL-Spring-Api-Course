@@ -23,7 +23,6 @@ public class SongServiceTest {
     @InjectMocks
     private SongService songService;
 
-
     @Test
     void testAddSongsToSinger() {
         Singer singer = new Singer(1L, "John", "Doe");
