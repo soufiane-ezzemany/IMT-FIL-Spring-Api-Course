@@ -53,7 +53,7 @@ public class SingerController {
     }
 
     @GetMapping("{singerId}/bestsongs")
-    @Operation(summary = "Récupérer un chanteur avec ses meilleurs chansons")
+    @Operation(summary = "Récupérer un chanteur avec ses meilleures chansons")
     public ResponseEntity<Singer> getSingerWithBestSongs(
             @PathVariable Long singerId,
             @RequestParam(name = "minRating") Float minRating) {
@@ -63,7 +63,7 @@ public class SingerController {
     }
     
     @GetMapping("")
-    @Operation(summary = "Récupérer la liste de tout les chanteurs")
+    @Operation(summary = "Récupérer la liste de tous les chanteurs")
     public Optional<List<SingerInfoOnly>> getAllSingers(){
         return singerService.getAllSingers();
     }
